@@ -1,0 +1,52 @@
+:root {
+  --theme-bg: #0D0D0D;
+  --neon-pink: #FF00FF;
+  --neon-cyan: #00FFFF;
+  --neon-purple: #8A2BE2;
+  --text-white: #FFFFFF;
+  --text-gray: #8A8A8A;
+  
+  /* Shared Glow Effects */
+  --glow-pink: 0 0 8px #FF00FF, 0 0 15px rgba(255, 0, 255, 0.5);
+  --glow-cyan: 0 0 8px #00FFFF, 0 0 15px rgba(0, 255, 255, 0.5);
+  --glow-purple: 0 0 8px #8A2BE2, 0 0 15px rgba(138, 43, 226, 0.5);
+  
+  /* Fonts */
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-cyber: 'Orbitron', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+
+/* Ticking Animation Keyframes */
+@keyframes neon-pulse-pink {
+  from {
+    text-shadow: 0 0 4px #FF00FF, 0 0 10px rgba(255, 0, 255, 0.5);
+  }
+  to {
+    text-shadow: 0 0 10px #FF00FF, 0 0 20px #FF00FF, 0 0 30px rgba(255, 0, 255, 0.8);
+  }
+}
+
+@keyframes neon-pulse-cyan {
+  from {
+    text-shadow: 0 0 4px #00FFFF, 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+  to {
+    text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px rgba(0, 255, 255, 0.8);
+  }
+}
+
+@keyframes scanlines-flicker {
+  0% { opacity: 0.97; }
+  50% { opacity: 1; }
+  100% { opacity: 0.98; }
+}
+
+@keyframes glitch-effect {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}

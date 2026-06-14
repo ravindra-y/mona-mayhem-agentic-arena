@@ -1,3 +1,5 @@
+@import './styles/theme.css';
+
 :root {
   /* Neon Arcade Palette */
   --bg-darker: #05030b;

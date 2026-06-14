@@ -5,6 +5,8 @@ import AddMatchForm from './components/AddMatchForm';
 import MatchHistoryTable from './components/MatchHistoryTable';
 import ConfirmModal from './components/ConfirmModal';
 import { RetroAudio } from './utils/RetroAudio';
+import GameOverScreen from './components/GameOverScreen';
+import VictoryScreen from './components/VictoryScreen';
 
 const INITIAL_MOCK_MATCHES = [
   { 
@@ -60,6 +62,9 @@ function App() {
   // Confirm delete modal state
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
+  // Toggle different screens to preview them interactively
+  const [viewMode, setViewMode] = useState('history'); // 'history', 'gameover', 'victory'
+
   // Sync matches to localStorage
   useEffect(() => {
     localStorage.setItem('mona_arena_matches', JSON.stringify(matches));
@@ -92,27 +97,108 @@ function App() {
     <>
       <Header audioEnabled={audioEnabled} setAudioEnabled={setAudioEnabled} />
       
-      <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-        <StatsPanel matches={matches} />
-        
-        <div 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
-            gap: '20px',
-            alignItems: 'start'
+      {/* Screen Preview Navigation Toggles */}
+      <div 
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          gap: '15px', 
+          marginBottom: '20px', 
+          flexWrap: 'wrap',
+          fontFamily: 'var(--font-pixel)',
+          fontSize: '9px'
+        }}
+      >
+        <button
+          onClick={() => { setViewMode('history'); RetroAudio.playClick(); }}
+          style={{
+            padding: '8px 16px',
+            background: viewMode === 'history' ? 'rgba(0, 255, 255, 0.15)' : 'transparent',
+            color: viewMode === 'history' ? 'var(--neon-cyan)' : 'var(--text-muted)',
+            border: `2px solid ${viewMode === 'history' ? 'var(--neon-cyan)' : 'rgba(157, 78, 221, 0.3)'}`,
+            borderRadius: '4px',
+            cursor: 'pointer',
+            textShadow: viewMode === 'history' ? '0 0 5px var(--neon-cyan)' : 'none'
           }}
         >
-          {/* Form to log or simulate new combats */}
-          <AddMatchForm onAddMatch={addMatch} />
-          
-          {/* Table display of match log details */}
-          <MatchHistoryTable 
-            matches={matches} 
-            onDeleteMatch={deleteMatch} 
-            onClearHistory={handleClearHistory} 
+          [BATTLE HISTORY]
+        </button>
+        <button
+          onClick={() => { setViewMode('gameover'); RetroAudio.playClick(); }}
+          style={{
+            padding: '8px 16px',
+            background: viewMode === 'gameover' ? 'rgba(255, 0, 255, 0.15)' : 'transparent',
+            color: viewMode === 'gameover' ? 'var(--neon-pink)' : 'var(--text-muted)',
+            border: `2px solid ${viewMode === 'gameover' ? 'var(--neon-pink)' : 'rgba(157, 78, 221, 0.3)'}`,
+            borderRadius: '4px',
+            cursor: 'pointer',
+            textShadow: viewMode === 'gameover' ? '0 0 5px var(--neon-pink)' : 'none'
+          }}
+        >
+          [PREVIEW SYSTEM FAILURE]
+        </button>
+        <button
+          onClick={() => { setViewMode('victory'); RetroAudio.playClick(); }}
+          style={{
+            padding: '8px 16px',
+            background: viewMode === 'victory' ? 'rgba(0, 255, 255, 0.15)' : 'transparent',
+            color: viewMode === 'victory' ? 'var(--neon-cyan)' : 'var(--text-muted)',
+            border: `2px solid ${viewMode === 'victory' ? 'var(--neon-cyan)' : 'rgba(157, 78, 221, 0.3)'}`,
+            borderRadius: '4px',
+            cursor: 'pointer',
+            textShadow: viewMode === 'victory' ? '0 0 5px var(--neon-cyan)' : 'none'
+          }}
+        >
+          [PREVIEW ARENA CHAMPION]
+        </button>
+      </div>
+
+      <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        {viewMode === 'history' && (
+          <>
+            <StatsPanel matches={matches} />
+            
+            <div 
+              style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+                gap: '20px',
+                alignItems: 'start'
+              }}
+            >
+              {/* Form to log or simulate new combats */}
+              <AddMatchForm onAddMatch={addMatch} />
+              
+              {/* Table display of match log details */}
+              <MatchHistoryTable 
+                matches={matches} 
+                onDeleteMatch={deleteMatch} 
+                onClearHistory={handleClearHistory} 
+              />
+            </div>
+          </>
+        )}
+
+        {viewMode === 'gameover' && (
+          <GameOverScreen
+            warriorName="Mona-Warrior-01"
+            battleScore={15400}
+            wavesCleared={12}
+            onRestart={() => setViewMode('history')}
+            onReturnToArena={() => setViewMode('history')}
           />
-        </div>
+        )}
+
+        {viewMode === 'victory' && (
+          <VictoryScreen
+            warriorName="Mona-Warrior-01"
+            battleScore={99250}
+            wavesCleared={32}
+            powerCoreRemaining={85}
+            onPlayAgain={() => setViewMode('history')}
+            onViewLeaderboard={() => setViewMode('history')}
+          />
+        )}
       </main>
 
       {/* Retro Alert Continue countdown cabinet prompt */}
